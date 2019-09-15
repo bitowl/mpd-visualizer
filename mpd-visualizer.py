@@ -11,7 +11,7 @@ windowLength = 1024
 
 frequencies = np.arange(windowLength / 2) * Fs / windowLength
 
-nBars = 60
+nBars = 20
 
 windowRate = Fs / windowLength
 
@@ -34,6 +34,7 @@ def transform(channel):
     t[2] = timer()
     mag = np.sqrt(FFT.real**2 + FFT.imag**2)
     t[3] = timer()
+#    scaled = mag
     scaled = np.log(mag)
     t[4] = timer()
     bins = groupFrequencies(scaled)
@@ -41,6 +42,7 @@ def transform(channel):
     maxMag = np.zeros(nBars)
     for i in range(nBars):
         maxMag[i] = np.max(bins[i])
+#        maxMag[i] = np.max(bins[i]) / 100000
     t[5] = timer()
     dt = np.diff(t)
     percents = dt / np.sum(dt)
@@ -48,8 +50,9 @@ def transform(channel):
     # print(np.sum(dt))
     return maxMag
 
-
-smoothingConstant = 0.00007
+#smoothingConstant = 0.00008
+smoothingConstant = 0.000001
+#smoothingConstant = 0
 adjustedSmoothingConstant = smoothingConstant**(1 / windowRate)
 
 
@@ -92,7 +95,7 @@ async def processAudio():
 
             t_1 = timer()
             dt = t_1 - t_0
-            print(f'FFT latency: {dt}')
+#            print(f'FFT latency: {dt}')
 
             yield json.dumps(spectrum.tolist())
 
@@ -117,7 +120,7 @@ async def sendFrame(websocket, path):
         await websocket.send(frame)
         t_1 = timer()
         dt = t_1 - t_0
-        print(f'web socket latency: {dt}')
+#        print(f'web socket latency: {dt}')
 
 
 asyncio.get_event_loop().run_until_complete(

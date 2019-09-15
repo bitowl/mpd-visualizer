@@ -1,15 +1,17 @@
 #!/bin/bash
 DIR=$(dirname "$0")
-mpc clear
-mpc add 'Britland City Theme.mp3'
-mpc volume 50
-mpc repeat on
-mpc single on
-mpc play
+#mpc clear
+#mpc add 'Britland City Theme.mp3'
+#mpc volume 50
+#mpc repeat on
+#mpc single on
+#mpc play
 
-od -t d2 --width=4 /tmp/my_fifo.fifo |
-cut --delimiter ' ' --fields 2- |
-python "$DIR/mpd-visualizer.py" &
 
-chromium --start-fullscreen --aggressive-cache-discard --disable-application-cache "$DIR/index.html" &
+#chromium --start-fullscreen --aggressive-cache-discard --disable-application-cache "$DIR/index.html" &
 #(sleep 5 && wmctrl -x -r chromium -b add,fullscreen) &
+
+od -t d2 --width=4 /tmp/mpd.fifo |
+cut --delimiter ' ' --fields 2- |
+python "$DIR/mpd-visualizer.py"
+

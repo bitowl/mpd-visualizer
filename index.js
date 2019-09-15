@@ -3,7 +3,7 @@ let ctx;
 let socket = new WebSocket("ws://localhost:8765");
 let dpi = window.devicePixelRatio;
 
-const scaling = 10;
+const scaling = 20;
 
 
 function fix_dpi() {
@@ -36,15 +36,19 @@ function draw(magnitudes) {
     const t_0 = performance.now();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const w = canvas.width / magnitudes.length;
-    const gap = w / 8;
-    const gradientHeight = canvas.height / 6;
-    ctx.beginPath();
+//    const gap = w / 8;
+    const gap = 2;
+    const gradientHeight = canvas.height / 4;
+/*    ctx.beginPath();
     ctx.moveTo(0, gradientHeight);
     ctx.lineTo(canvas.width, gradientHeight);
-    ctx.stroke();
+    ctx.stroke();*/
     const gradient = ctx.createLinearGradient(canvas.width / 2, 0, canvas.width / 2, gradientHeight);
-    gradient.addColorStop(0, "#3366b2");
-    gradient.addColorStop(1, "#91faff");
+/*    gradient.addColorStop(0, "#3366b2");
+    gradient.addColorStop(1, "#91faff");*/
+
+    gradient.addColorStop(0, "#000");
+    gradient.addColorStop(1, "#c2ea21");
     ctx.fillStyle = gradient;
     for (let i = 0; i < magnitudes.length; i++) {
         ctx.fillRect(i * w + gap, 0, w - 2 * gap, scaling * magnitudes[i]);
